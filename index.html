@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Alone Again Simulator 2026</title>
+
+<style>
+body{
+    background: linear-gradient(135deg,#ff5f6d,#ffc371);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    padding: 30px;
+}
+
+#gameTitle{
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.quiz-box{
+    background: rgba(0,0,0,0.3);
+    max-width: 520px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.fade{
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+img{
+    display: block;
+    margin: 0 auto 15px auto;
+    width: 200px;
+    border-radius: 12px;
+}
+
+button{
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background: white;
+    color: #333;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+button:hover{
+    transform: scale(1.05);
+    background: #ffb6c1;
+}
+
+.progress-container{
+    width: 100%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    height: 12px;
+}
+
+.progress-bar{
+    height: 12px;
+    width: 0%;
+    background: white;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.result-text{
+    font-size: 18px;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="gameTitle">💀 Alone Again Simulator 2026 💔</div>
+
+<div class="quiz-box">
+
+<div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<img id="quizImage" src="">
+<div id="question"></div>
+<div id="choices"></div>
+<h2 id="result"></h2>
+<div class="result-text" id="resultText"></div>
+
+</div>
+
+<script>
+
+const questions = [
+{
+question: "What best describes your love life right now?",
+image: "https://cdn-icons-png.flaticon.com/512/833/833472.png",
+choices: [
+"Happily taken 💑",
+"Single but flirty 😏",
+"Lonely 😔",
+"Alone but happy 😌",
+"It’s complicated 🆘"
+]
+},
+{
+question: "What are you doing this Valentine’s Day?",
+image: "https://cdn-icons-png.flaticon.com/512/1077/1077035.png",
+choices: [
+"Romantic date 💕",
+"Gaming or watching shows 🎮🍿",
+"Staring at your phone waiting for a text 📱",
+"Third-wheeling someone else’s date 😐",
+"Pretending it’s a normal day"
+]
+},
+{
+question: "How fast do you reply to a crush’s message?",
+image: "https://cdn-icons-png.flaticon.com/512/2462/2462719.png",
+choices: [
+"Instantly ⚡",
+"After 5 minutes 😌",
+"After hours (on purpose) ⏳",
+"I overthink and never reply 🤡",
+"Nobody texts me anyway 💀"
+]
+}
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answers = [];
+
+function updateProgress(){
+    const progress = ((currentQuestion) / questions.length) * 100;
+    document.getElementById("progressBar").style.width = progress + "%";
+}
+
+function showQuestion(){
+    const box = document.querySelector(".quiz-box");
+    box.classList.add("fade");
+
+    setTimeout(() => {
+        box.classList.remove("fade");
+
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("resultText").innerHTML = "";
+
+        const q = questions[currentQuestion];
+
+        document.getElementById("quizImage").style.display = "block";
+        document.getElementById("quizImage").src = q.image;
+        document.getElementById("question").innerHTML = `<h2>${q.question}</h2>`;
+
+        const choicesDiv = document.getElementById("choices");
+        choicesDiv.innerHTML = "";
+
+        q.choices.forEach((choice,index)=>{
+            const btn = document.createElement("button");
+            btn.innerText = choice;
+            btn.onclick = ()=>selectAnswer(index);
+            choicesDiv.appendChild(btn);
+        });
+
+        updateProgress();
+
+    },150);
+}
+
+function selectAnswer(index){
+    answers.push(index);
+    score += index;
+    currentQuestion++;
+
+    if(currentQuestion < questions.length){
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult(){
+
+    document.getElementById("progressBar").style.width = "100%";
+    document.getElementById("question").innerHTML = "";
+    document.getElementById("choices").innerHTML = "";
+
+    // SPECIAL TOXIC ENDING (all first choices)
+    if(answers.every(a => a === 0)){
+        document.getElementById("quizImage").src =
+        "https://cdn-icons-png.flaticon.com/512/1828/1828843.png"; // angry face
+
+        document.getElementById("result").innerHTML = "💖 Certified Lover";
+
+        document.getElementById("resultText").innerHTML =
+        "Maghihiwalay din kayo wag kang umasa 💀";
+
+        return;
+    }
+
+    // Realistic results
+    let title = "";
+    let text = "";
+    let image = "";
+
+    if(score <= 4){
+        title = "🙂 Emotionally Stable Single";
+        text = "You’re single but not desperate. You’re chilling and focusing on yourself.";
+        image = "https://cdn-icons-png.flaticon.com/512/4140/4140048.png";
+    }
+    else if(score <= 7){
+        title = "😅 Mildly Delusional Romantic";
+        text = "You believe in love… but you also check their last seen.";
+        image = "https://cdn-icons-png.flaticon.com/512/742/742940.png";
+    }
+    else if(score <= 10){
+        title = "😐 Situationship Survivor";
+        text = "You’ve seen things. You’ve felt things. It wasn’t official.";
+        image = "https://cdn-icons-png.flaticon.com/512/616/616494.png";
+    }
+    else{
+        title = "💀 Fully Independent Main Character";
+        text = "At this point, love is optional. Peace is mandatory.";
+        image = "https://cdn-icons-png.flaticon.com/512/921/921071.png";
+    }
+
+    document.getElementById("quizImage").src = image;
+    document.getElementById("result").innerHTML = title;
+    document.getElementById("resultText").innerHTML = text + 
+    `<br><br><button onclick="restartGame()">Play Again 🔁</button>`;
+}
+
+function restartGame(){
+    currentQuestion = 0;
+    score = 0;
+    answers = [];
+    showQuestion();
+}
+
+showQuestion();
+
+</script>
+
+</body>
+</html>
